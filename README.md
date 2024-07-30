@@ -56,7 +56,7 @@ To get started with the Cat Health Tracker project, follow these steps:
     cd cat-health-tracker
     ```
 
- 3. **Install Dependencies**
+3. **Install Dependencies**
  
  Install the required dependencies using npm or yarn:
 ```bash
@@ -75,4 +75,4 @@ yarn dev
 
 5. **Open the Application**
 
-Open your browser and go to http://localhost:3000 to view the application.
+Open your browser and go to [http://localhost:3000](http://localhost:3000) to view the application.
