@@ -63,7 +63,7 @@ const CatTracker = () => {
 
       if (newData.weight) {
         const newWeightEntry: WeightEntry = {
-          date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+          date: new Date().toISOString().split('T')[0],
           weight: parseFloat(newData.weight),
         };
         setWeightHistory((prevHistory) => [...prevHistory, newWeightEntry]);

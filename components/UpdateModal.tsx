@@ -21,7 +21,6 @@ const UpdateModal = ({ field, currentValue, onClose, onUpdate }: UpdateModalProp
         const formData = new FormData(e.target as HTMLFormElement);
         const data = Object.fromEntries(formData.entries());
         const updatedData: Partial<CatData> = { [field as CatDataKey]: data[field as string]?.toString() };
-        console.log('Calling onUpdate with:', updatedData);
         onUpdate(updatedData);
       };
     

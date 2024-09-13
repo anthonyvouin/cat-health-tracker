@@ -13,13 +13,12 @@ interface CatDataChartProps {
 
 const CatDataChart = ({ weightHistory }: CatDataChartProps) => {
   return (
-    <Card>
+    <Card className="mt-4">
       <CardHeader>
         <CardTitle>Weight Over Time</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full h-72">
-          {/* ResponsiveContainer ensures the chart is responsive */}
           <ResponsiveContainer>
             <LineChart data={weightHistory}>
               <CartesianGrid strokeDasharray="3 3" />
