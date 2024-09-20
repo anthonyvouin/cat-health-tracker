@@ -1,10 +1,12 @@
-interface CatData {
+export interface CatData {
     lastMeal: string;
     lastVetAppointment: string;
     weight: string;
     lastGrooming: string;
     lastMedication: string;
-    [key: string]: string;
   }
   
-  export default CatData;
+  export interface WeightEntry {
+    date: string;
+    weight: number;
+  }

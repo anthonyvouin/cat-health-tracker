@@ -5,7 +5,7 @@ import CatDataDisplay from './CatDataDisplay';
 import CatDataChart from './CatDataChart';
 import ReminderSystem from './ReminderSystem';
 import UpdateModal from './UpdateModal';
-import CatData from '../lib/CatData';
+import { CatData } from '../types/CatData';
 
 interface WeightEntry {
   date: string;
@@ -76,7 +76,10 @@ const CatTracker = () => {
   return (
     <div>
       <h1>Pet Tracker Health System</h1>
-      <CatDataDisplay catData={catData} onUpdateClick={(field) => setUpdateModal({ isOpen: true, field })} />
+      <CatDataDisplay 
+        catData={catData} 
+        onUpdateClick={(field: string) => setUpdateModal({ isOpen: true, field: field as keyof CatData })} 
+      />
       <CatDataChart weightHistory={weightHistory} />
       {catData.lastMeal || catData.lastVetAppointment || catData.lastGrooming ? (
         <ReminderSystem catData={catData} />

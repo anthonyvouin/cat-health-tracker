@@ -2,7 +2,7 @@ import React from 'react';
 import { Utensils, Stethoscope, Scale, Scissors, Pill } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import CatData from '../lib/CatData';
+import { CatData } from '@/types/CatData';
 
   interface CatDataDisplayProps {
     catData: CatData;
