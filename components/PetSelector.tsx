@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Pet } from '@/types/Pet';
+import { v4 as uuidv4 } from 'uuid';
 
 interface PetSelectorProps {
   onPetSelect: (pet: Pet | null) => void;
@@ -24,8 +25,9 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
     }
   }, []);
 
-  const handlePetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const pet = pets.find(p => p.name === e.target.value) || null;
+  const handlePetChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedPetId = event.target.value;
+    const pet = pets.find(p => p.name === selectedPetId) || null;
     onPetSelect(pet);
   };
 
@@ -47,10 +49,11 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const updatedPets = [...pets, newPet];
+    const petWithId = { ...newPet, id: uuidv4() };
+    const updatedPets = [...pets, petWithId];
     setPets(updatedPets);
     localStorage.setItem('pets', JSON.stringify(updatedPets));
-    onPetSelect(newPet);
+    onPetSelect(petWithId);
     setNewPet({ id: '', name: '', species: '', age: 0, imageUrl: '', type: '' });
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -58,7 +61,7 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
   return (
     <div className="space-y-4">
       {pets.length > 0 ? (
-        <Select onValueChange={(value) => handlePetChange({ target: { value } } as any)}>
+        <Select onValueChange={(value) => handlePetChange({ target: { value } } as React.ChangeEvent<HTMLSelectElement>)}>
           <SelectTrigger>
             <SelectValue placeholder="Sélectionnez un animal" />
           </SelectTrigger>
@@ -82,7 +85,7 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Nom de l'animal</Label>
+              <Label htmlFor="name">Name of the pet</Label>
               <Input id="name" name="name" value={newPet.name} onChange={handleInputChange} required />
             </div>
             <div>
