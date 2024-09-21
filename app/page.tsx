@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PetSelector from '@/components/PetSelector';
 import PetInfo from '@/components/PetInfo';
 import CatHealthTracker from '@/components/CatHealthTracker';
@@ -10,10 +10,6 @@ export default function Home() {
 
   const handlePetSelect = (pet: Pet) => {
     setSelectedPet(pet);
-    localStorage.setItem('lastSelectedPet', JSON.stringify({
-      id: pet.id,
-      name: pet.name,
-    }));
   };
 
   return (
