@@ -1,93 +1,62 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CatDataDisplay from './CatDataDisplay';
 import CatDataChart from './CatDataChart';
 import ReminderSystem from './ReminderSystem';
 import UpdateModal from './UpdateModal';
+import { usePetData } from '../hooks/usePetData';
+import { useWeightHistory } from '../hooks/useWeightHistory';
 import { CatData } from '../types/CatData';
+import { Pet } from '../types/Pet';
 
-interface WeightEntry {
-  date: string;
-  weight: number;
+interface CatHealthTrackerProps {
+  petId: Pet['id'];
+  petName: string;
 }
 
-const CatTracker = () => {
-  const [catData, setCatData] = useState<CatData>({
-    lastMeal: '',
-    lastVetAppointment: '',
-    weight: '',
-    lastGrooming: '',
-    lastMedication: '',
-  });
-
-  const [weightHistory, setWeightHistory] = useState<WeightEntry[]>([]);
+const CatHealthTracker: React.FC<CatHealthTrackerProps> = ({ petId, petName }) => {
+  const stringPetId = petId.toString();
+  const { catData, updateCatData, deletePet } = usePetData(stringPetId);
+  const { weightHistory, addWeightEntry } = useWeightHistory(stringPetId);
   const [updateModal, setUpdateModal] = useState<{ isOpen: boolean; field: keyof CatData | null }>({ isOpen: false, field: null });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedData = localStorage.getItem('catData');
-      if (savedData) {
-        setCatData(JSON.parse(savedData));
-      }
+  const handleDataUpdate = async (newData: Partial<CatData>) => {
+    await updateCatData(newData);
+    if (newData.weight) {
+      await addWeightEntry(parseFloat(newData.weight));
+    }
+  };
 
-      const savedWeights = localStorage.getItem('weightHistory');
-      if (savedWeights) {
-        setWeightHistory(JSON.parse(savedWeights));
+  const handleDeletePet = async () => {
+    if (window.confirm(`Are you sure you want to delete ${petName}? This action cannot be undone.`)) {
+      const success = await deletePet();
+      if (success) {
+        window.location.href = '/';
+      } else {
+        alert('Failed to delete pet. Please try again.');
       }
     }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('catData', JSON.stringify(catData));
-    }
-  }, [catData]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
-    }
-  }, [weightHistory]);
-
-  const handleDataUpdate = (newData: Partial<CatData>) => {
-
-    setCatData((prevState) => {
-      const updatedData: CatData = {
-        lastMeal: newData.lastMeal ?? prevState.lastMeal,
-        lastVetAppointment: newData.lastVetAppointment ?? prevState.lastVetAppointment,
-        weight: newData.weight ?? prevState.weight,
-        lastGrooming: newData.lastGrooming ?? prevState.lastGrooming,
-        lastMedication: newData.lastMedication ?? prevState.lastMedication,
-      };
-
-      if (newData.weight) {
-        const newWeightEntry: WeightEntry = {
-          date: new Date().toISOString().split('T')[0],
-          weight: parseFloat(newData.weight),
-        };
-        setWeightHistory((prevHistory) => [...prevHistory, newWeightEntry]);
-      }
-
-      return updatedData;
-    });
   };
 
   return (
     <div>
-      <h1>Pet Tracker Health System</h1>
-      <CatDataDisplay 
-        catData={catData} 
-        onUpdateClick={(field: string) => setUpdateModal({ isOpen: true, field: field as keyof CatData })} 
-      />
-      <CatDataChart weightHistory={weightHistory} />
-      {catData.lastMeal || catData.lastVetAppointment || catData.lastGrooming ? (
+      <h1>{petName} Health Tracker (ID: {petId})</h1>
+      <button onClick={handleDeletePet} className="bg-red-500 text-white px-4 py-2 rounded">Delete Pet</button>
+      {catData && (
+        <CatDataDisplay 
+          catData={catData} 
+          onUpdateClick={(field: string) => setUpdateModal({ isOpen: true, field: field as keyof CatData })} 
+        />
+      )}
+      {weightHistory.length > 0 && <CatDataChart weightHistory={weightHistory} />}
+      {catData?.lastMeal || catData?.lastVetAppointment || catData?.lastGrooming ? (
         <ReminderSystem catData={catData} />
       ) : null}
       {updateModal.isOpen && updateModal.field && (
         <UpdateModal
           field={updateModal.field}
-          currentValue={catData[updateModal.field]}
+          currentValue={String(catData?.[updateModal.field] ?? '')}
           onClose={() => setUpdateModal({ isOpen: false, field: null })}
           onUpdate={handleDataUpdate}
         />
@@ -96,7 +65,7 @@ const CatTracker = () => {
   );
 };
 
-export default CatTracker;
+export default CatHealthTracker;
 
 
 

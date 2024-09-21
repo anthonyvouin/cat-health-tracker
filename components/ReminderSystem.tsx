@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
@@ -7,7 +7,7 @@ interface ReminderSystemProps {
 }
 
 const ReminderSystem = ({ catData }: ReminderSystemProps) => {
-  const generateReminders = () => {
+  const generateReminders = useCallback(() => {
     const reminders = [];
     const currentDate = new Date();
 
@@ -36,20 +36,11 @@ const ReminderSystem = ({ catData }: ReminderSystemProps) => {
     }
 
     return reminders;
-  };
-
-  const sendNotification = (message: string) => {
-    if (Notification.permission === 'granted') {
-      new Notification('Cat Health Reminder', { body: message });
-    }
-  };
+  }, [catData]);
 
   useEffect(() => {
-    const reminders = generateReminders();
-    reminders.forEach(reminder => {
-      sendNotification(reminder);
-    });
-  }, [catData]);
+    generateReminders();
+  }, [generateReminders]);
 
   const reminders = generateReminders();
 

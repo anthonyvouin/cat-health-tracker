@@ -4,5 +4,5 @@ export interface Pet {
     type: string;
     species: string;
     age: number;
-    imageUrl: string | File;
+    imageUrl: string;
   }

@@ -8,15 +8,23 @@ import { Pet } from '@/types/Pet';
 export default function Home() {
   const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
 
-  const handlePetSelect = (pet: Pet | null) => {
+  const handlePetSelect = (pet: Pet) => {
     setSelectedPet(pet);
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <PetSelector onPetSelect={handlePetSelect} />
-      {selectedPet && <PetInfo pet={selectedPet} />}
-      {selectedPet && <CatHealthTracker />}
+      <PetSelector onPetSelect={(pet: Pet | null) => handlePetSelect(pet as Pet)} />
+      {selectedPet && (
+        <>
+          <PetInfo pet={selectedPet} />
+          <CatHealthTracker
+            key={selectedPet.id}
+            petName={selectedPet.name}
+            petId={selectedPet.id}
+          />
+        </>
+      )}
     </main>
   );
 }

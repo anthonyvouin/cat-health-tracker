@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X } from 'lucide-react';
-import CatData from '@/lib/CatData';
+import { CatData } from '../types/CatData';
 
 
 type CatDataKey = keyof CatData;
