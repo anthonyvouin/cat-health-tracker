@@ -66,7 +66,16 @@ yarn install
 ```
 4. **Start the Development Server**
 
-Run the development server to start working on the project:
+ Install the required dependencies using npm or yarn:
+```bash
+cd server
+npm install
+# or
+cd server
+yarn install
+```
+
+Run the development server to start working on the project à la racine:
 ```bash
 npm run dev
 # or
