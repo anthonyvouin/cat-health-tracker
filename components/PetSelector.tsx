@@ -31,6 +31,9 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
     onPetSelect(pet);
   };
 
+  // Pour annuler 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const addedPet = await addPet(newPet);
@@ -38,6 +41,7 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
       setPets(prevPets => [...prevPets, addedPet]);
       onPetSelect(addedPet);
       setNewPet({ name: '', species: '', age: 0, imageUrl: '', type: '' });
+      setIsDialogOpen(false)
     }
   };
 
@@ -45,6 +49,7 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
     const { name, value } = e.target;
     setNewPet(prev => ({ ...prev, [name]: value }));
   };
+
 
   return (
     <div>
@@ -58,15 +63,17 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
             </SelectTrigger>
             <SelectContent>
               {pets.map((pet) => (
-                <SelectItem key={pet.id} value={String(pet.id)}>{pet.name}</SelectItem>
+                <SelectItem key={pet.id} value={String(pet.id)}>
+                  {pet.name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
         ) : (
           <p>Aucun animal trouvé.</p>
         )}
-        
-        <Dialog>
+
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>Ajouter un nouvel animal</Button>
           </DialogTrigger>
@@ -77,24 +84,54 @@ const PetSelector: React.FC<PetSelectorProps> = ({ onPetSelect }) => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="name">Name of the pet</Label>
-                <Input id="name" name="name" value={newPet.name} onChange={handleInputChange} required />
+                <Input
+                  id="name"
+                  name="name"
+                  value={newPet.name}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
               <div>
                 <Label htmlFor="species">Espèce</Label>
-                <Input id="species" name="species" value={newPet.species} onChange={handleInputChange} required />
+                <Input
+                  id="species"
+                  name="species"
+                  value={newPet.species}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
               <div>
                 <Label htmlFor="age">Âge</Label>
-                <Input id="age" name="age" type="number" value={newPet.age} onChange={handleInputChange} required min="0" />
+                <Input
+                  id="age"
+                  name="age"
+                  type="number"
+                  value={newPet.age}
+                  onChange={handleInputChange}
+                  required
+                  min="0"
+                />
               </div>
               <div>
                 <Label htmlFor="imageUrl">Image of the pet</Label>
-                <Input id="imageUrl" name="imageUrl" value={newPet.imageUrl} onChange={handleInputChange} />
+                <Input
+                  id="imageUrl"
+                  name="imageUrl"
+                  value={newPet.imageUrl}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="flex justify-end space-x-2">
-
                 <Button type="submit">Ajouter</Button>
-                <Button type="button" variant="outline">Annuler</Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  Annuler
+                </Button>
               </div>
             </form>
           </DialogContent>

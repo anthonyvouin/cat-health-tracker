@@ -29,8 +29,12 @@ const CatDataDisplay = ({ catData, onUpdateClick }: CatDataDisplayProps) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-2">{item.value || 'No data'}</p>
-            <Button onClick={() => onUpdateClick(item.field)} variant="outline">
+            <p className="mb-2">{item.value || "No data"}</p>
+            <Button
+              onClick={() => onUpdateClick(item.field)}
+              variant="outline"
+              aria-label={`Update ${item.title}`}
+            >
               Update
             </Button>
           </CardContent>
