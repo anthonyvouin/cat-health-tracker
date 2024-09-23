@@ -34,7 +34,7 @@ This repository includes a series of exercises aimed at improving the accessibil
 3. **Enhancing Keyboard Navigation**
 4. **Testing and Refining Accessibility**
 
-These exercises are designed to be completed within approximately 12 hours and will guide you through practical improvements and testing procedures to ensure the application meets high accessibility standards.
+These exercises will guide you through practical improvements and testing procedures to ensure the application meets high accessibility standards.
 
 By completing these exercises, you will gain hands-on experience in applying accessibility principles to a real-world project, enhancing both your skills and the quality of your web applications.
 
