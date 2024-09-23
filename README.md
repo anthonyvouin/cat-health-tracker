@@ -75,7 +75,7 @@ cd server
 yarn install
 ```
 
-Run the development server to start working on the project à la racine:
+5. Run the development server to start working on the project :
 ```bash
 npm run dev
 # or
